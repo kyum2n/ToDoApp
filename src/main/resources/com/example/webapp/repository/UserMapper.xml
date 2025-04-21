@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.webapp.repository.UserMapper">
+    <select id="selectByUId" resultType="com.example.webapp.entity.User">
+        SELECT * FROM users WHERE uId = #{uId}
+    </select>
+    
+    <select id="findById" parameterType="string" resultType="com.example.webapp.entity.User">
+        SELECT * FROM users WHERE uId = #{uId}
+    </select>
+    
+    <insert id="insertUser" parameterType="com.example.webapp.entity.User">
+        insert into users (uName, uId, uPwd, uMail)
+        values (#{uName}, #{uId}, #{uPwd}, #{uMail})
+    </insert>
+
+</mapper>
+

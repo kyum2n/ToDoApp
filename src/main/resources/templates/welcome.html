@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Welcome</title>
+</head>
+
+<body>
+    <h1 th:if="${username != null}" th:text="'안녕하세요, ' + ${session.loggedInUser.uId} + '님!'">로그인 성공!</h1>
+    <p>환영합니다, <span th:text="${username}"></span>님!</p>
+    <h1 th:unless="${username != null}">로그인이 필요합니다.</h1>
+    <!-- <a href="/todos">목록 보기</a> -->
+    <a href="/todos/logout">로그아웃</a>
+
+    <section>
+        <h2>ToDo 목록</h2>
+        <!-- 플래시 메시지 표시 -->
+        <p th:if="${message}" th:text="${message}" style="color: blue;">완료 메시지
+        </p>
+        <p th:if="${errorMessage}" th:text="${errorMessage}" style="color: red;">
+            오류 메시지
+        </p>
+    
+    
+        <table border="1" width="100%">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>작성자</th>
+                    <th>할 일</th>
+                    <th>기한</th>
+                    <th>완료 여부</th>
+                    <!-- <th>남은 시간</th> -->
+                    <th>상세</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="todo : ${todos}">
+                    <td th:text="${todo.id}">1</td>
+                    <td th:text="${todo.uId}">user1</td>
+                    <td th:text="${todo.todo}">물주기</td>
+    
+    
+                    <!-- 기한 출력 -->
+                    <td th:text="${todo.deadline != null ?
+                                      #temporals.format(todo.deadline, 'yyyy-MM-dd HH:mm') :
+                                      '기한 없음'}"></td>
+    
+    
+                    <!-- 완료 체크 (작성자만 가능) -->
+                    <td>
+                        <div th:if="${todo.uId == session.uId}"><!---->
+                            <form th:action="@{/todos/{id}/toggle(id=${todo.id})}" method="post" target="_self">
+                                <input type="checkbox" th:checked="${todo.done}" onchange="this.form.submit()" />
+                            </form>
+                        </div>
+                        <div th:unless="${todo.uId == session.uId}"><!--  -->
+                            <span th:text="${todo.done != null && todo.done} ? '완료' : '미완료'"></span>
+                        </div>
+                    </td>
+    
+    
+                    <!-- 남은 시간 표시 -->
+                    <!-- <td th:text="${todo.deadlineStatus}">3일 남음</td> -->
+    
+    
+                    <!-- 상세 보기 (작성자만 링크) -->
+                    <td>
+                        <a th:href="@{/todos/{id}(id=${todo.id})}">
+                            상세 보기
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a th:href="@{/todos/form}">새 할일 등록</a>
+    </section>
+
+    <footer style="margin-top: 50px; text-align: center;">
+        <p th:if="${weather}" th:text="${weather}">날씨 정보 불러오는 중...</p>
+    </footer>    
+</body>
+
+</html>

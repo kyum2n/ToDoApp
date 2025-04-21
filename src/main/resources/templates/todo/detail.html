@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>ToDo 상세 보기</title>
+</head>
+
+<body>
+    <h2>ToDo 상세 보기</h2>
+    <table border="1">
+        <tr>
+            <th>ID</th>
+            <td th:text="${todo.id}"></td>
+        </tr>
+        <tr>
+            <th>닉네임</th>
+            <td th:text="${todo.uId}"></td>
+        </tr>
+        <tr>
+            <th>제목</th>
+            <td th:text="${todo.todo}"></td>
+        </tr>
+        <tr>
+            <th>기한</th>
+            <td th:text="${todo.deadline != null ?
+                #temporals.format(todo.deadline, 'yyyy-MM-dd HH:mm') : '기한 없음'}"></td>
+        </tr>
+        <tr>
+            <th>상세 보기</th>
+            <td th:text="${todo.detail}"></td>
+        </tr>
+        <tr>
+            <th>등록 일시</th>
+            <td th:text="${createdAtFormatted}">
+            </td>
+        </tr>
+        <tr>
+            <th>업데이트 일시</th>
+            <td th:text="${updatedAtFormatted}">
+            </td>
+        </tr>
+    </table>
+    
+    <a th:href="@{/todos/edit/{id}(id=${todo.id})}">편집</a>
+    
+    <form th:action="@{/todos/delete/{id}(id=${todo.id})}" method="post" style="display: inline;">
+        <input type="submit" value="삭제">
+    </form>
+
+    <br><br>
+    
+    <a th:href="@{/todos}">ToDo 목록으로</a>
+
+    <a th:href="@{/welcome}">Home으로</a>
+</body>
+
+</html>
