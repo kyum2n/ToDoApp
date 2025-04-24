@@ -15,12 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.webapp.entity.ToDo;
+import com.example.webapp.entity.ToDoLocation;
 import com.example.webapp.form.ToDoForm;
 import com.example.webapp.helper.ToDoHelper;
 import com.example.webapp.service.ToDoService;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.web.bind.annotation.ResponseBody;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/todos")
@@ -97,6 +102,8 @@ public class TodoController {
             RedirectAttributes attributes) {
 
         // ====== 유효성 검사 =======
+
+        System.out.println(">>> 저장 전 좌표: " + form.getLatitude() + ", " + form.getLongitude());
 
         // 입력체크NG : 입력화면 표시
         if (bindingResult.hasErrors()) {
@@ -216,4 +223,22 @@ public class TodoController {
 
         return "redirect:/todos";
     }
+
+    // 할일 위치 반환
+    @GetMapping("/map")
+    @ResponseBody
+    public List<ToDoLocation> getAllTodoLocations() {
+        List<ToDo> todos = toDoService.findAllToDo();
+
+        return todos.stream()
+                .filter(todo -> todo.getLatitude() != null && todo.getLongitude() != null)
+                .map(todo -> new ToDoLocation(
+                        todo.getId(),
+                        todo.getTodo(),
+                        todo.getLatitude(),
+                        todo.getLongitude(),
+                        todo.getUId()))
+                .collect(Collectors.toList());
+    }
+
 }

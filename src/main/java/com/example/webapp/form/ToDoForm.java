@@ -59,4 +59,8 @@ public class ToDoForm {
 
     /** 새 항목 여부 */
     private Boolean isNew;
+
+    /** 위치 정보 추가 */
+    private Double latitude; // 위도
+    private Double longitude; // 경도
 }

@@ -34,6 +34,9 @@ public class ToDoHelper {
         todo.setDone(Boolean.TRUE.equals(form.getDone()));
         todo.setDeadline(form.getDeadline());
 
+        todo.setLatitude(form.getLatitude());
+        todo.setLongitude(form.getLongitude());
+
         return todo;
     }
 

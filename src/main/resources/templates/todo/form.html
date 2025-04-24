@@ -4,6 +4,10 @@
 
 <head>
     <title>ToDo 폼</title>
+    <!-- <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=d4df265c234a6cb0e0f1fd95b9a82f6a"></script> -->
+    <script type="text/javascript" src="http://dapi.kakao.com/v2/maps/sdk.js?appkey=d4df265c234a6cb0e0f1fd95b9a82f6a&libraries=services"></script>
+
+        
 </head>
 
 
@@ -11,7 +15,7 @@
     <!-- 제목: 등록 또는 편집 -->
     <h2 th:if="${toDoForm.isNew}">새 ToDo 등록</h2>
     <h2 th:unless="${toDoForm.isNew}">ToDo 편집</h2>
-  
+
     <!-- 액션: 등록 또는 편집 -->
     <form th:action="${toDoForm.isNew} ? @{/todos/save} : @{/todos/update}" th:object="${toDoForm}" method="post">
         <!-- id는 업데이트 시 필요하기 때문에 hidden으로 보유 -->
@@ -46,7 +50,15 @@
                     <input type="datetime-local" th:field="*{deadline}" />
                 </td>
             </tr>
+            <tr>
+                <th>위치 선택</th>
+                <td>
+                    <div id="map" style="width: 200px; height: 200px;"></div>
+                </td>
+            </tr>
         </table>
+        <input type="hidden" th:field="*{latitude}" id="latitude" />
+        <input type="hidden" th:field="*{longitude}" id="longitude" />
         <!-- 버튼: 등록 또는 편집 -->
         <!-- <input th:if="${toDoForm.isNew}" type="submit" value="등록"> -->
         <!-- <input th:unless="${toDoForm.isNew}" type="submit" value="업데이트"> -->
@@ -57,6 +69,51 @@
         style="display: inline-block; margin-top: 20px; color: green; font-weight: bold; text-decoration: underline;">
         Home
     </a>
+
+    <script>
+        kakao.maps.load(() => {
+          // 지도 초기화 여기로 옮기기
+          const defaultLat = 37.5665;
+          const defaultLng = 126.9780;
+          const lat = /*[[${toDoForm.latitude != null ? toDoForm.latitude : 'null'}]]*/ null;
+          const lng = /*[[${toDoForm.longitude != null ? toDoForm.longitude : 'null'}]]*/ null;
+      
+          const container = document.getElementById('map');
+          const options = {
+            center: (lat !== null && lng !== null)
+              ? new kakao.maps.LatLng(lat, lng)
+              : new kakao.maps.LatLng(defaultLat, defaultLng),
+            level: 5
+          };
+      
+          const map = new kakao.maps.Map(container, options);
+      
+          let marker = null;
+      
+          if (lat !== null && lng !== null) {
+            marker = new kakao.maps.Marker({
+              position: new kakao.maps.LatLng(lat, lng),
+              map: map
+            });
+          }
+      
+          kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+            const clickedLatLng = mouseEvent.latLng;
+      
+            if (marker) {
+              marker.setPosition(clickedLatLng);
+            } else {
+              marker = new kakao.maps.Marker({
+                position: clickedLatLng,
+                map: map
+              });
+            }
+      
+            document.getElementById('latitude').value = clickedLatLng.getLat();
+            document.getElementById('longitude').value = clickedLatLng.getLng();
+          });
+        });
+      </script>
 </body>
 
 
