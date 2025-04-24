@@ -4,17 +4,53 @@
     <meta charset="UTF-8">
     <title>메인 화면</title>
     <style>
-        .login-box {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+        .login-container {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          width: 240px;
+          background-color: #fff;
+          padding: 15px;
+          border: 1px solid #ccc;
+          border-radius: 10px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        .join-box {
-            position: absolute;
-            top: 60px;
-            right: 10px;
+  
+        .login-container form {
+          display: flex;
+          flex-direction: column;
         }
-    </style>
+  
+        .login-container label {
+          margin-top: 8px;
+        }
+  
+        .login-container input {
+          padding: 6px;
+          margin-top: 4px;
+        }
+  
+        .login-container .button-row {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 10px;
+        }
+  
+        .login-container .social-section {
+          text-align: center;
+          margin-top: 15px;
+        }
+  
+        .login-container .social-section img {
+          height: 36px;
+        }
+  
+        .login-container .error {
+          color: red;
+          margin-top: 10px;
+          text-align: center;
+        }
+      </style>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=d4df265c234a6cb0e0f1fd95b9a82f6a"></script>
 </head>
 <body>
@@ -28,34 +64,58 @@
 
 
 
-        
-        <div class="login-box">
-            <div th:if="${session.loggedInUser == null}">
-                <form action="/todos/login" method="post">
-                    <label for="username">아이디:</label>
-                    <input type="text" id="username" name="uId" placeholder="아이디" required />
-                    <br />
-                    <label for="password">비밀번호:</label>
-                    <input type="password" id="password" name="uPwd" placeholder="비밀번호" required />
-                    
-                    <button type="submit">로그인</button>
-                </form>
-                
-                <p th:if="${error}" th:text="${error}" style="color: red"></p>
-            </div>
-            
-            <div th:if="${session.loggedInUser != null}">
-                <p th:text="'어서오세요, ' + ${session.loggedInUser.uName} + '님!'">로그인 사용자</p>
-                <a href="/logout">로그아웃</a>
-            </div>
-        </div>
-
-        <div class="join-box">
-            <form action="/todos/join">
-                <!-- <a th:href="@{/todos/join}">회원가입</a> -->
-                <button type="submit">회원가입</button>
+        <div class="login-container" th:if="${session.loggedInUser == null}">
+            <form action="/todos/login" method="post">
+              <label for="username">아이디:</label>
+              <input
+                type="text"
+                id="username"
+                name="uId"
+                placeholder="아이디"
+                required
+              />
+    
+              <label for="password">비밀번호:</label>
+              <input
+                type="password"
+                id="password"
+                name="uPwd"
+                placeholder="비밀번호"
+                required
+              />
+    
+              <div class="button-row">
+                <button type="submit">로그인</button>
+                <a href="/todos/join"><button type="button">회원가입</button></a>
+              </div>
+    
+              <!-- 구글 로그인 -->
+            <p>소셜 로그인으로 간편하게 이용해보세요</p>
+            <a href="/oauth2/authorization/google">
+              <img
+                src="https://developers.google.com/identity/images/btn_google_signin_light_normal_web.png"
+                alt="Sign in with Google"
+                style="height: 40px"
+              />
+            </a>
+          </div>
+    
+              <div class="error" th:if="${error}" th:text="${error}"></div>
             </form>
-        </div>
+          </div>
+    
+          
+    
+          <div class="login-container" th:if="${session.loggedInUser != null}">
+            <p th:text="'어서오세요, ' + ${session.loggedInUser.uName} + '님!'"></p>
+            <a href="/logout">로그아웃</a>
+          </div>
+    
+          <div class="join-box">
+            <form action="/todos/join">
+              <!-- <a th:href="@{/todos/join}">회원가입</a> -->
+            </form>
+          </div>
     </header>
 
     <section>
