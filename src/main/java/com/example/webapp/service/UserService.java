@@ -14,6 +14,9 @@ public interface UserService {
     // 사용자를 추가
     void insertUser(User users);
 
+    // 구글로 로그인 시 이메일로 사용자 조회
+    User findByEmail(String email);
+
     // 로그인 체크
     // User findByUIdAndPassword(String uId, String uPwd);
 

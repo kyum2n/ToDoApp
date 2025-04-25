@@ -32,4 +32,9 @@ public class UserServiceImpl implements UserService {
     public void insertUser(User users) {
         userMapper.insertUser(users);
     }
+
+    @Override
+    public User findByEmail(String email) {
+        return userMapper.selectByUMail(email);
+    }
 }

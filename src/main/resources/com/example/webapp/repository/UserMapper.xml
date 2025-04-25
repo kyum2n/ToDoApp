@@ -6,6 +6,10 @@
     <select id="selectByUId" resultType="com.example.webapp.entity.User">
         SELECT * FROM users WHERE uId = #{uId}
     </select>
+
+    <select id="selectByUMail" resultType="com.example.webapp.entity.User">
+        SELECT * FROM users WHERE uMail = #{uMail}
+    </select>
     
     <select id="findById" parameterType="string" resultType="com.example.webapp.entity.User">
         SELECT * FROM users WHERE uId = #{uId}
